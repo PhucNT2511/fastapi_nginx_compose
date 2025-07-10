@@ -1,0 +1,26 @@
+version: '3.9'  # Phiên bản cấu trúc Docker Compose
+
+services:
+  app1:  # Dịch vụ FastAPI số 1
+    build: ./app1  # Build image từ thư mục app1 (chứa Dockerfile)
+    container_name: fastapi_app1  # Tên container cố định để Nginx dễ gọi
+    expose:
+      - "8000"  # Mở cổng nội bộ (trong Container) của app FastAPI, cho Nginx truy cập
+
+  app2:  # Dịch vụ FastAPI số 2
+    build: ./app2
+    container_name: fastapi_app2
+    expose:
+      - "8000"
+
+  nginx:  # Dịch vụ Nginx làm reverse proxy
+    image: nginx:latest  # Dùng image chính thức mới nhất từ Docker Hub
+    container_name: nginx_proxy
+    ports:
+      - "8080:80"  # Mở cổng 80 của nginx container - map - cổng 8080 của Host
+    volumes:
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf  # Mount file chứa server {}
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf  # Mount file chính (chứa http {}, zones, include)
+    depends_on:
+      - app1  # Đảm bảo app1 khởi động trước
+      - app2  # Đảm bảo app2 khởi động trước
