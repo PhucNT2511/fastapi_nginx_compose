@@ -4,8 +4,6 @@ Triển khai 2 ứng dụng FastAPI qua Nginx sử dụng Docker Compose.
 
 ## 📦 Cấu trúc thư mục
 
-## 📦 Cấu trúc thư mục
-
 ```
 fastapi_nginx_compose/
 ├── app1/
